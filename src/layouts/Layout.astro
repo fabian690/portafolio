@@ -1,15 +1,30 @@
-<!doctype html>
-<html lang="en">
+---
+import "../styles/global.css";
+import ScrollProgress from "../components/ScrollProgress";
+---
+
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Fabian Lopez | Desarrollador Full-Stack</title>
 	</head>
-	<body>
-		<slot />
+	<body
+		class="bg-zinc-950 text-zinc-50 antialiased selection:bg-zinc-800 selection:text-zinc-50 relative"
+		style={{
+			backgroundImage:
+				"radial-gradient(ellipse at top, rgba(161, 161, 170, 0.05) 0%, rgba(9, 9, 11, 0) 100%)",
+		}}
+	>
+		<div class="fixed inset-0 z-0 pointer-events-none opacity-20 grain-bg">
+		</div>
+		<div class="relative z-10">
+			<ScrollProgress client:load />
+			<slot />
+		</div>
 	</body>
 </html>
 
