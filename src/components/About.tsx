@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import perfilImg from '../assets/perfil.png';
 
 export default function About() {
     return (
@@ -59,7 +60,7 @@ export default function About() {
                     <div className="aspect-square rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 rotate-3 hover:rotate-0 transition-transform duration-500">
                         <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-zinc-950" />
                         <div className="absolute inset-0 flex items-center justify-center text-zinc-700">
-                            Foto de Perfil
+                            <img src={perfilImg.src} alt="Foto de perfil" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>
