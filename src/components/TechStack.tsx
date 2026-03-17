@@ -1,25 +1,28 @@
 import { motion } from "framer-motion";
 import { Monitor, Server, Database } from "lucide-react";
-
-const categorias = [
-    {
-        titulo: "Frontend",
-        Icono: Monitor,
-        herramientas: ["React", "Vue", "Angular", "Astro", "Tailwind CSS"]
-    },
-    {
-        titulo: "Backend",
-        Icono: Server,
-        herramientas: ["Spring Boot", "Node.js", "Express", "NestJS"]
-    },
-    {
-        titulo: "Infraestructura & Datos",
-        Icono: Database,
-        herramientas: ["Docker", "Docker Swarm", "Git", "PostgreSQL", "MongoDB"]
-    }
-];
+import { useLanguage } from "../store/languageStore";
 
 export default function TechStack() {
+    const { t } = useLanguage();
+    
+    const categorias = [
+        {
+            titulo: t('techStack.categories.frontend'),
+            Icono: Monitor,
+            herramientas: ["React", "Vue", "Angular", "Astro", "Tailwind CSS"]
+        },
+        {
+            titulo: t('techStack.categories.backend'),
+            Icono: Server,
+            herramientas: ["Spring Boot", "Node.js", "Express", "NestJS"]
+        },
+        {
+            titulo: t('techStack.categories.infrastructure'),
+            Icono: Database,
+            herramientas: ["Docker", "Docker Swarm", "Git", "PostgreSQL", "MongoDB"]
+        }
+    ];
+
     return (
         <section className="py-32">
             <motion.h2
@@ -27,9 +30,9 @@ export default function TechStack() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-10% 0px -10% 0px" }}
                 transition={{ duration: 0.6 }}
-                className="text-3xl md:text-4xl font-bold text-zinc-100 mb-16"
+                className="text-3xl md:text-4xl font-bold text-text-primary mb-16"
             >
-                Stack Tecnológico
+                {t('techStack.title')}
             </motion.h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -42,9 +45,9 @@ export default function TechStack() {
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         className="flex flex-col"
                     >
-                        <div className="flex items-center gap-3 mb-6 bg-zinc-900/40 p-3 rounded-lg border border-zinc-800 inline-flex self-start">
-                            <categoria.Icono className="w-5 h-5 text-emerald-400" />
-                            <h3 className="text-lg font-medium text-zinc-200">
+                        <div className="flex items-center gap-3 mb-6 bg-card-bg p-3 rounded-lg border border-border-primary inline-flex self-start">
+                            <categoria.Icono className="w-5 h-5 text-accent" />
+                            <h3 className="text-lg font-medium text-text-primary/90">
                                 {categoria.titulo}
                             </h3>
                         </div>
@@ -52,7 +55,7 @@ export default function TechStack() {
                             {categoria.herramientas.map((herramienta, i) => (
                                 <span
                                     key={i}
-                                    className="px-3 py-1.5 bg-zinc-900/50 text-zinc-400 text-sm rounded-md hover:bg-zinc-900/80 hover:text-zinc-200 transition-colors cursor-default border border-zinc-800/50"
+                                    className="px-3 py-1.5 bg-card-bg text-text-secondary text-sm rounded-md hover:bg-accent-muted hover:text-accent transition-colors cursor-default border border-border-primary"
                                 >
                                     {herramienta}
                                 </span>

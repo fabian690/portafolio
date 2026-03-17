@@ -1,8 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Github, Linkedin, Mail, Download, MessageCircle } from "lucide-react";
-
+import { useLanguage } from "../store/languageStore";
 
 export default function Hero() {
+    const { t } = useLanguage();
     const { scrollY } = useScroll();
     const y = useTransform(scrollY, [0, 500], [0, 150]);
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -17,11 +18,11 @@ export default function Hero() {
                     className="flex items-center gap-2 mb-6"
                 >
                     <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
                     </span>
-                    <span className="text-zinc-400 text-sm font-medium tracking-wide bg-zinc-900/50 px-3 py-1 rounded-full border border-zinc-800">
-                        Disponible para trabajar
+                    <span className="text-text-secondary text-sm font-medium tracking-wide bg-card-bg px-3 py-1 rounded-full border border-border-primary">
+                        {t('hero.available')}
                     </span>
                 </motion.div>
 
@@ -29,18 +30,18 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="text-5xl md:text-7xl font-bold tracking-tighter text-zinc-50 mb-6"
+                    className="text-5xl md:text-7xl font-bold tracking-tighter text-text-primary mb-6"
                 >
-                    Hola, soy <span className="bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">Fabian Lopez.</span>
+                    {t('hero.greeting')} <span className="text-accent">{t('hero.name')}</span>
                 </motion.h1>
 
                 <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                    className="text-xl md:text-2xl text-zinc-400 max-w-xl leading-relaxed"
+                    className="text-xl md:text-2xl text-text-secondary max-w-xl leading-relaxed"
                 >
-                    Desarrollador Full-Stack. Transformo tus ideas en software rápido, escalable y fácil de usar.
+                    {t('hero.role')} {t('hero.description')}
                 </motion.p>
 
                 <motion.div
@@ -53,7 +54,7 @@ export default function Hero() {
                         href="https://github.com/LuisFaLo"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-zinc-900 text-zinc-400 rounded-full hover:bg-zinc-800 hover:text-zinc-50 transition-colors border border-zinc-800 hover:border-zinc-700"
+                        className="p-3 bg-card-bg text-text-secondary rounded-full hover:bg-zinc-800 hover:text-text-primary transition-colors border border-border-primary hover:border-accent"
                         aria-label="GitHub"
                     >
                         <Github size={20} />
@@ -62,7 +63,7 @@ export default function Hero() {
                         href="https://www.linkedin.com/in/luis-lopez-032490349/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-zinc-900 text-zinc-400 rounded-full hover:bg-zinc-800 hover:text-zinc-50 transition-colors border border-zinc-800 hover:border-zinc-700"
+                        className="p-3 bg-card-bg text-text-secondary rounded-full hover:bg-zinc-800 hover:text-text-primary transition-colors border border-border-primary hover:border-accent"
                         aria-label="LinkedIn"
                     >
                         <Linkedin size={20} />
@@ -78,9 +79,9 @@ export default function Hero() {
             >
                 <a
                     href="#proyectos"
-                    className="relative overflow-hidden px-6 py-3 bg-zinc-100 text-zinc-950 rounded-full font-semibold hover:bg-white hover:scale-105 transition-all inline-block shadow-[0_0_20px_rgba(52,211,153,0.1)] group text-center flex-1 sm:flex-none"
+                    className="relative overflow-hidden px-6 py-3 bg-text-primary text-bg-primary rounded-full font-semibold hover:scale-105 transition-all inline-block group text-center flex-1 sm:flex-none border border-transparent hover:border-accent"
                 >
-                    <span className="relative z-10">Ver proyectos</span>
+                    <span className="relative z-10">{t('hero.viewProjects')}</span>
                     <div className="absolute inset-0 shimmer-button rounded-full pointer-events-none"></div>
                 </a>
                 <a
@@ -89,27 +90,27 @@ export default function Hero() {
                         e.preventDefault();
                         window.dispatchEvent(new Event('open-contact-modal'));
                     }}
-                    className="px-6 py-3 bg-zinc-900/50 text-zinc-50 rounded-full font-medium hover:bg-zinc-900 border border-zinc-800 transition-colors inline-flex items-center gap-2"
+                    className="px-6 py-3 bg-card-bg text-text-primary rounded-full font-medium hover:bg-zinc-100/10 border border-border-primary transition-colors inline-flex items-center gap-2"
                 >
                     <Mail size={18} />
-                    Email
+                    {t('hero.email')}
                 </a>
                 <a
                     href="https://wa.me/59165809614?text=Hola%20Fabian,%20vi%20tu%20portafolio%20y%20me%20interesa%20tu%20perfil.%20%C2%BFPodr%C3%ADamos%20hablar%20sobre%20una%20oportunidad?"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 bg-emerald-500/10 text-emerald-400 rounded-full font-medium hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors inline-flex items-center gap-2"
+                    className="px-6 py-3 bg-accent-muted text-accent rounded-full font-medium hover:opacity-80 border border-accent/20 transition-colors inline-flex items-center gap-2"
                 >
                     <MessageCircle size={18} />
-                    WhatsApp
+                    {t('hero.whatsapp')}
                 </a>
                 <a
                     href="/cv.pdf"
                     download="CV_Jhosua_Caucota.pdf"
-                    className="px-6 py-3 bg-emerald-500/10 text-emerald-400 rounded-full font-medium hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors inline-flex items-center gap-2"
+                    className="px-6 py-3 bg-accent-muted text-accent rounded-full font-medium hover:opacity-80 border border-accent/20 transition-colors inline-flex items-center gap-2"
                 >
                     <Download size={18} />
-                    Descargar CV
+                    {t('hero.downloadCV')}
                 </a>
             </motion.div>
         </section>

@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, ExternalLink, Github } from "lucide-react";
+import { useLanguage } from "../store/languageStore";
 
 // Tariquia Web
 import tariquiaLogin from "../assets/loginTariquiaRepo.png";
@@ -21,52 +22,37 @@ import appPrincipal from "../assets/apppantallaprincipal.png";
 import appMaterias from "../assets/appMaterias.png";
 import appDescargas from "../assets/appdescargas.png";
 
-const proyectos = [
-  {
-    titulo: "Tariquia - Repositorio Académico",
-    descripcion: "Plataforma universitaria para la gestión de archivos de profesores y administración de préstamos de tablets.",
-    stack: ["Spring Boot", "React", "PostgreSQL", "Docker Swarm"],
-    enlace: "https://tariquiarepo.uajms.edu.bo/tariquiarepo/",
-    tipo: "web",
-    imagenes: [tariquiaLogin, tariquiaPrincipal, tariquiaEstudiantes, tariquiaReportes]
-  },
-  {
-    titulo: "Tariquia - App Móvil",
-    descripcion: "Aplicación móvil complementaria para consulta rápida de recursos y gestión de perfil de usuario en el campus.",
-    stack: ["React Native", "Spring Boot", "Android"],
-    enlace: null,
-    tipo: "mobile",
-    imagenes: [appLogin, appInicio, appPrincipal, appMaterias, appDescargas]
-  },
-  {
-    titulo: "Sistema de Gestión para Gimnasio",
-    descripcion: "Plataforma integral para el control de membresías, usuarios y administración general del recinto deportivo.",
-    stack: ["Vue", "Node.js", "MongoDB"],
-    enlace: null,
-    tipo: "web",
-    imagenes: [gymLogin, gymPrincipal, gymMembresias, gymGrafica]
-  },
-  {
-    titulo: "Clínica de Laboratorio",
-    descripcion: "Sistema de gestión para el control de pacientes, órdenes de exámenes y resultados clínicos. Enfocado en la optimización de tiempos.",
-    stack: ["Angular", "NestJS", "PostgreSQL"],
-    enlace: null,
-    tipo: "web",
-    imagenes: [],
-    estado: "En desarrollo"
-  }
+const projectImages = [
+  [tariquiaLogin, tariquiaPrincipal, tariquiaEstudiantes, tariquiaReportes],
+  [appLogin, appInicio, appPrincipal, appMaterias, appDescargas],
+  [gymLogin, gymPrincipal, gymMembresias, gymGrafica],
+  []
 ];
 
 export default function Projects() {
+  const { t } = useLanguage();
   const [lightbox, setLightbox] = useState<{ isOpen: boolean; projectId: number; imageIndex: number }>({
     isOpen: false,
     projectId: 0,
     imageIndex: 0,
   });
 
+  const rawProjects = t('projects.items');
+  const proyectos = Array.isArray(rawProjects) ? rawProjects.map((p: any, i: number) => ({
+    ...p,
+    imagenes: projectImages[i] || [],
+    stack: i === 0 ? ["Spring Boot", "React", "PostgreSQL", "Docker Swarm"] :
+           i === 1 ? ["React Native", "Spring Boot", "Android"] :
+           i === 2 ? ["Vue", "Node.js", "MongoDB"] :
+           ["Angular", "NestJS", "PostgreSQL"],
+    enlace: i === 0 ? "https://tariquiarepo.uajms.edu.bo/tariquiarepo/" : null,
+    tipo: i === 1 ? "mobile" : "web",
+    estado: i === 3 ? "En desarrollo" : null
+  })) : [];
+
   const openLightbox = (projectId: number, imageIndex: number) => {
     setLightbox({ isOpen: true, projectId, imageIndex });
-    document.body.style.overflow = "hidden"; // Prevent scrolling
+    document.body.style.overflow = "hidden";
   };
 
   const closeLightbox = () => {
@@ -74,7 +60,6 @@ export default function Projects() {
     document.body.style.overflow = "auto";
   };
 
-  // Helper to safely get image source
   const getImgSrc = (img: any) => {
     if (!img) return "";
     return typeof img === "string" ? img : img.src;
@@ -87,35 +72,34 @@ export default function Projects() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, margin: "-10% 0px -10% 0px" }}
         transition={{ duration: 0.6 }}
-        className="text-3xl md:text-4xl font-bold text-zinc-100 mb-16"
+        className="text-3xl md:text-4xl font-bold text-text-primary mb-16"
       >
-        Proyectos Destacados
+        {t('projects.title')}
       </motion.h2>
 
       <div className="flex flex-col gap-24">
-        {proyectos.map((proyecto, index) => (
+        {proyectos.map((proyecto: any, index: number) => (
           <ProjectCard
             key={index}
             proyecto={proyecto}
             index={index}
-            onImageClick={(imgIndex) => openLightbox(index, imgIndex)}
+            onImageClick={(imgIndex: number) => openLightbox(index, imgIndex)}
           />
         ))}
       </div>
 
-      {/* Lightbox Modal */}
       <AnimatePresence>
         {lightbox.isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-bg-primary/90 p-4 backdrop-blur-sm"
             onClick={closeLightbox}
           >
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors p-2"
+              className="absolute top-4 right-4 text-text-secondary hover:text-text-primary transition-colors p-2"
             >
               <X size={32} />
             </button>
@@ -140,7 +124,7 @@ export default function Projects() {
                     onClick={(e) => {
                       e.stopPropagation();
                       const imgs = proyectos[lightbox.projectId].imagenes;
-                      setLightbox(prev => ({ ...prev, imageIndex: (prev.imageIndex - 1 + imgs.length) % imgs.length }));
+                      setLightbox((prev: any) => ({ ...prev, imageIndex: (prev.imageIndex - 1 + imgs.length) % imgs.length }));
                     }}
                     className="absolute left-2 md:-left-12 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white transition-colors"
                   >
@@ -150,7 +134,7 @@ export default function Projects() {
                     onClick={(e) => {
                       e.stopPropagation();
                       const imgs = proyectos[lightbox.projectId].imagenes;
-                      setLightbox(prev => ({ ...prev, imageIndex: (prev.imageIndex + 1) % imgs.length }));
+                      setLightbox((prev: any) => ({ ...prev, imageIndex: (prev.imageIndex + 1) % imgs.length }));
                     }}
                     className="absolute right-2 md:-right-12 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white transition-colors"
                   >
@@ -160,7 +144,7 @@ export default function Projects() {
               )}
             </div>
 
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 font-medium bg-black/50 px-4 py-2 rounded-full backdrop-blur-md">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-text-primary/80 font-medium bg-bg-primary/50 px-4 py-2 rounded-full backdrop-blur-md">
               {lightbox.imageIndex + 1} / {proyectos[lightbox.projectId].imagenes.length}
             </div>
           </motion.div>
@@ -171,6 +155,7 @@ export default function Projects() {
 }
 
 function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: number, onImageClick: (i: number) => void }) {
+  const { t } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = (e: React.MouseEvent) => {
@@ -187,7 +172,6 @@ function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: 
     }
   };
 
-  // Helper to safely get image source
   const getImgSrc = (img: any) => {
     if (!img) return "";
     return typeof img === "string" ? img : img.src;
@@ -203,11 +187,7 @@ function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: 
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group grid md:grid-cols-2 gap-8 items-center relative"
     >
-      {/* Glow effect behind the card */}
-      <div className="absolute -inset-4 bg-gradient-to-r from-emerald-500 to-sky-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500 -z-10" />
-
-      {/* Visual: Image Carousel or Placeholder */}
-      <div className={`relative rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800 group-hover:border-zinc-700 transition-all duration-500 md:-rotate-2 md:group-hover:rotate-0 ${isMobileApp ? "aspect-[9/16] max-w-[280px] mx-auto md:mx-0 shadow-2xl" : "aspect-video w-full"
+      <div className={`relative rounded-2xl overflow-hidden bg-card-bg border border-border-primary group-hover:border-accent transition-all duration-500 md:-rotate-2 md:group-hover:rotate-0 ${isMobileApp ? "aspect-[9/16] max-w-[280px] mx-auto md:mx-0 shadow-2xl" : "aspect-video w-full"
         }`}>
         {proyecto.imagenes.length > 0 ? (
           <div className="relative w-full h-full group/carousel cursor-zoom-in" onClick={() => onImageClick(currentImageIndex)}>
@@ -228,14 +208,14 @@ function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: 
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-zinc-900/80 text-zinc-200 rounded-full hover:bg-zinc-800 transition-colors z-10 opacity-0 group-hover/carousel:opacity-100"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-card-bg text-text-secondary rounded-full hover:text-text-primary transition-colors z-10 opacity-0 group-hover/carousel:opacity-100"
                   aria-label="Previous image"
                 >
                   <ChevronLeft size={20} />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-zinc-900/80 text-zinc-200 rounded-full hover:bg-zinc-800 transition-colors z-10 opacity-0 group-hover/carousel:opacity-100"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-card-bg text-text-secondary rounded-full hover:text-text-primary transition-colors z-10 opacity-0 group-hover/carousel:opacity-100"
                   aria-label="Next image"
                 >
                   <ChevronRight size={20} />
@@ -244,22 +224,21 @@ function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: 
                   {proyecto.imagenes.map((_: any, i: number) => (
                     <div
                       key={i}
-                      className={`w-1.5 h-1.5 rounded-full transition-colors ${i === currentImageIndex ? 'bg-white' : 'bg-zinc-600'}`}
+                      className={`w-1.5 h-1.5 rounded-full transition-colors ${i === currentImageIndex ? 'bg-text-primary' : 'bg-text-secondary/50'}`}
                     />
                   ))}
                 </div>
               </>
             )}
-            {/* Hover hint */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/carousel:opacity-10 pointer-events-none transition-opacity bg-black">
-              <span className="text-white font-medium">Click para ampliar</span>
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/carousel:opacity-10 pointer-events-none transition-opacity bg-bg-primary">
+              <span className="text-text-primary font-medium">{t('projects.hoverZoom')}</span>
             </div>
           </div>
         ) : (
           <>
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-zinc-950 opacity-50 group-hover:opacity-70 transition-opacity" />
+            <div className="absolute inset-0 bg-gradient-to-br from-border-primary to-card-bg opacity-50 group-hover:opacity-70 transition-opacity" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-zinc-700 font-medium text-lg">Próximamente</span>
+              <span className="text-text-secondary font-medium text-lg">{t('projects.statusSoon')}</span>
             </div>
           </>
         )}
@@ -267,22 +246,22 @@ function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: 
 
       <div className="flex flex-col justify-center">
         <div className="flex flex-wrap items-center gap-3 mb-4">
-          <h3 className="text-2xl font-medium text-zinc-100 group-hover:text-white transition-colors">
+          <h3 className="text-2xl font-medium text-text-primary group-hover:text-accent transition-colors">
             {proyecto.titulo}
           </h3>
           {proyecto.titulo.includes("Tariquia") && !proyecto.titulo.includes("App") && (
-            <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-xs font-medium rounded-full border border-emerald-500/20">
+            <span className="px-2 py-0.5 bg-accent-muted text-accent text-xs font-medium rounded-full border border-accent/20">
               Team Lead
             </span>
           )}
           {proyecto.estado === "En desarrollo" && (
             <span className="px-2 py-0.5 bg-amber-500/10 text-amber-400 text-xs font-medium rounded-full border border-amber-500/20 animate-pulse">
-              En desarrollo
+              {t('projects.statusDevelopment')}
             </span>
           )}
         </div>
 
-        <p className="text-zinc-400 text-lg mb-6 leading-relaxed">
+        <p className="text-text-secondary text-lg mb-6 leading-relaxed">
           {proyecto.descripcion}
         </p>
 
@@ -290,7 +269,7 @@ function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: 
           {proyecto.stack.map((tech: string, i: number) => (
             <span
               key={i}
-              className="px-3 py-1 bg-zinc-900/50 border border-zinc-800 text-zinc-400 text-sm rounded-md"
+              className="px-3 py-1 bg-card-bg border border-border-primary text-text-secondary text-sm rounded-md"
             >
               {tech}
             </span>
@@ -303,18 +282,18 @@ function ProjectCard({ proyecto, index, onImageClick }: { proyecto: any, index: 
               href={proyecto.enlace}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium text-zinc-100 hover:text-white transition-colors flex items-center gap-2"
+              className="text-sm font-medium text-text-primary hover:text-accent transition-colors flex items-center gap-2"
             >
               <ExternalLink size={18} />
-              Ver Demo Live
+              {t('projects.demoBtn')}
             </a>
           )}
           <a
             href="#"
-            className="text-sm font-medium text-zinc-400 hover:text-zinc-200 transition-colors flex items-center gap-2"
+            className="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2"
           >
             <Github size={18} />
-            Ver Código
+            {t('projects.codeBtn')}
           </a>
         </div>
       </div>

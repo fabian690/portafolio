@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+@theme {
+  --color-bg-primary: var(--bg-primary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
+  --color-border-primary: var(--border-primary);
+  --color-card-bg: var(--card-bg);
+}
+
+:root {
+  --bg-primary: #000000;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --accent: #34d399;
+  --accent-muted: rgba(52, 211, 153, 0.1);
+  --border-primary: #27272a;
+  --card-bg: rgba(24, 24, 27, 0.4);
+}
+
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --text-primary: #09090b;
+  --text-secondary: #52525b;
+  --border-primary: #e4e4e7;
+  --card-bg: rgba(244, 244, 245, 0.5);
+}
+
 @layer utilities {
   .grain-bg {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
