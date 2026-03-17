@@ -18,6 +18,8 @@ export const translations = {
             email: "Email",
             whatsapp: "WhatsApp",
             downloadCV: "Descargar CV",
+            cvPath: "/cv-es.pdf",
+            cvFilename: "CV_Fabian_Lopez_ES.pdf",
         },
         experience: {
             title: "Experiencia Profesional",
@@ -141,6 +143,8 @@ export const translations = {
             email: "Email",
             whatsapp: "WhatsApp",
             downloadCV: "Download CV",
+            cvPath: "/cv-en.pdf",
+            cvFilename: "CV_Fabian_Lopez_EN.pdf",
         },
         experience: {
             title: "Professional Experience",

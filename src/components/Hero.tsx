@@ -105,8 +105,8 @@ export default function Hero() {
                     {t('hero.whatsapp')}
                 </a>
                 <a
-                    href="/cv.pdf"
-                    download="CV_Jhosua_Caucota.pdf"
+                    href={t('hero.cvPath')}
+                    download={t('hero.cvFilename')}
                     className="px-6 py-3 bg-accent-muted text-accent rounded-full font-medium hover:opacity-80 border border-accent/20 transition-colors inline-flex items-center gap-2"
                 >
                     <Download size={18} />
