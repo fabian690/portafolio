@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import perfilImg from '../assets/me.jpeg';
+import perfilImg from '../assets/Me.jpeg';
 import { useLanguage } from "../store/languageStore";
 
 export default function About() {
